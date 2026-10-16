@@ -1,13 +1,11 @@
 # Changelog
 
-## 0.2.0 — ZIP inbox
-- Added `process-zip.yml`, `scripts/process-zip-inbox.py`, 25 unit tests, `_inbox/` and `_failed/`, and `docs/ZIP_INBOX_OPERATIONS.md`.
-- Android build workflow now ignores pushes that only touch `_inbox/` or `_failed/`, and skips itself in the template repository.
-- Verified: actionlint, pyflakes, unit tests, a local git end-to-end simulation (good ZIP, rejected ZIP, commit and push). Not verified on live GitHub.
-
-## 0.1.0 — initial version
-- Build workflow (compile, unit tests, debug APK, artifacts, diagnostics).
-- Manual release workflow (optional signing, optional draft GitHub Release).
-- Validation and diagnostics scripts, documentation set.
-- Verified: actionlint, shellcheck, YAML parse, mock-project script tests.
-- Not yet verified: a real Android build on GitHub (see `tests/workflow-validation.md`).
+## 0.1.0 (first MVP, not yet built by CI)
+### Implemented
+- Project setup: Compose, Room (KSP), Navigation, Gradle Kotlin DSL.
+- Home dashboard, business profile, capability statement builder, quotation generator, tender checklist, readiness checklist, saved documents, settings and data deletion.
+- PDF generation with Android PdfDocument, Share, Save to chosen location, preview in viewer app.
+- Room database v1 with 7 entities, foreign keys, cascading deletes, unique quotation numbers.
+- JVM unit tests: calculator, money, checklist, validation, PDF layout and content (run locally), repository and PDF writer (Robolectric, not yet run).
+### Fixes
+- None yet. First build pending.

@@ -1,23 +1,40 @@
-# Project requirements (summary of the owner's handover)
+# Project requirements: TenderReady PNG
 
-**Goal:** a reusable repository template that builds and tests Android apps with GitHub Actions, produces a downloadable debug APK, and can be operated from an Android phone.
+## Product requirements
+Help PNG micro and small businesses (builders, cleaners, caterers, security, transport, suppliers) quote and
+prepare tender material using only their phone, offline, for free.
 
-## Owner constraints
-- Android phone is the main device; no Android Studio locally.
-- Free tools only; no paid plans, paid APIs or unnecessary subscriptions.
-- GitHub for source; ChatGPT for planning/review; Claude for coding/handovers.
+## Functional requirements (MVP)
+| ID | Requirement |
+|----|-------------|
+| F1 | Open with no account; home shows branding, profile status, and links to every feature. |
+| F2 | Reusable business profile stored in Room; incomplete profiles can be saved; formats validated. |
+| F3 | Capability statement pre-filled from profile, editable, exported to multi-page PDF, labelled as user-provided. |
+| F4 | Quotations with line items, decimal quantity, additional charges, discount, optional configurable tax, validity, payment terms, notes; drafts; edit; PDF; share. |
+| F5 | Quotation totals use integer arithmetic with documented rounding; numbers are unique. |
+| F6 | Tender opportunities with manual requirements, three statuses, counts and percentage. |
+| F7 | Customisable readiness checklist with notes, four statuses, percentage and disclaimer. |
+| F8 | Saved documents screen: reopen, edit, delete with confirmation. |
+| F9 | Save PDF (file picker), Share PDF (Sharesheet), preview in a viewer app. |
+| F10 | Settings: version, privacy text, language note, delete all data with confirmation. |
 
-## Must have
-- Triggers: manual, push, pull request; concurrency cancellation.
-- Project detection with actionable errors; never report success when nothing was built.
-- Configurable module and Gradle tasks; Gradle wrapper only; dependency caching.
-- Separate reporting of compile, unit-test, instrumented-test and APK results.
-- Debug APK artifact with documented retention; failure diagnostics with categories.
-- Least-privilege permissions, no secrets in logs, no `pull_request_target` for untrusted code.
-- Optional manual release workflow with optional signing; no app-store publishing.
-- Accurate, verified billing documentation.
-- Documentation set listed in the handover (`docs/`, `examples/`, `tests/`).
+## Non-functional requirements
+Offline-first; no network permission; no analytics; no secrets; large touch targets and plain language;
+works on low-end devices (minSdk 24, no heavy libraries); data survives navigation and rotation;
+free tools only; builds with GitHub Actions.
 
-## Out of scope / not claimed
-- Proof that an app works on a physical device.
-- Universal framework compatibility.
+## MVP boundaries (not built)
+Online submission, government integration, marketplace, payments, paid APIs, AI legal/tax advice,
+automatic eligibility or compliance decisions, accounts, cloud sync, remote databases, SMS, roles, social features.
+
+## Acceptance criteria
+1. GitHub Actions run of compileDebugSources, testDebugUnitTest and assembleDebug is green.
+2. The debug APK installs on a physical Android phone and opens without an account.
+3. A profile, quotation, capability statement, opportunity and checklist can be created, saved, closed, reopened and edited with data intact.
+4. Quotation PDF totals match the on-screen totals; kina formatting is correct.
+5. Long capability statements and 50+ item quotations produce multi-page PDFs with no clipped text.
+6. Share PDF opens the Android share sheet; Save PDF writes a file to the chosen location.
+7. Duplicate quotation numbers are refused with a clear message.
+8. Delete all data empties the app after confirmation.
+9. No screen claims compliance, eligibility or guaranteed success.
+Items 2 to 8 can only be confirmed by the owner on a phone (see `REVIEW.md`).

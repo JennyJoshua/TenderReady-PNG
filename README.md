@@ -1,44 +1,62 @@
-# Android GitHub Actions template
+# TenderReady PNG
 
-Build and test native Android apps on GitHub's cloud runners and download the debug APK to your phone. No Android Studio needed.
+*Get your PNG business ready to quote, bid, and win contracts.*
 
-**Status:** workflows pass actionlint, shellcheck and YAML checks, and the helper scripts were tested against mock projects. **No real Android build has been run yet** (see `tests/workflow-validation.md`). Run the first-build checklist before trusting it.
+An offline-first native Android app that helps micro and small businesses in Papua New Guinea prepare
+professional documents and organise tender requirements. It needs no account, no internet and no paid service.
 
-## What it does
-1. Checks the repository is a Gradle Android project (clear errors if not).
-2. Sets up Java, the Android SDK and Gradle caching.
-3. Validates the Gradle wrapper, compiles, runs unit tests, builds a debug APK.
-4. Uploads the APK as an Actions artifact (`android-debug-apk-run<N>`).
-5. On failure, writes a classified summary and uploads logs and reports.
+**Status: MVP source code, version 0.1.0. It has NOT yet been built by GitHub Actions or run on a phone.**
+See `REVIEW.md` for exactly what was and was not checked.
 
-## Quick start (phone)
-1. Tap **Use this template** → **Create a new repository** (see `docs/PHONE_WORKFLOW.md`).
-2. Upload your Android project to the repository root (`gradlew`, `gradle/`, `settings.gradle*`, `build.gradle*`, `app/`).
-3. Open **Actions → Android build and test → Run workflow**.
-4. When it finishes, open the run, scroll to **Artifacts**, download, unzip, install.
+The app helps you organise and prepare documents. It does not confirm legal compliance or tender eligibility,
+and it cannot promise you will win any contract.
 
-## Scope
-- Supported: native Gradle Android projects (Kotlin or Java).
-- Detected and stopped with an explanation: Flutter, React Native. See `docs/FRAMEWORK_COMPATIBILITY.md`.
-- Not run: instrumented (emulator) tests. Not included: Play Store publishing.
+## Features
+- **Home**: branding, profile status, shortcuts, empty states.
+- **Business profile**: reusable details, can be saved incomplete, basic format checks.
+- **Capability statement**: pre-filled from the profile, fully editable, multi-page PDF. Labelled as based on information provided by the user. Nothing is invented.
+- **Quotations**: line items with decimal quantities, additional charges, discount, optional tax, validity, payment terms, notes. Kina (PGK) formatting. Unique quotation numbers. Save drafts, edit later, export PDF.
+- **Tender checklist**: opportunities with your own requirements (Outstanding / Complete / Not applicable), counts and percentage.
+- **Readiness checklist**: customisable general checklist (Not started / In progress / Complete / Not applicable).
+- **Saved documents**: reopen, edit, delete (with confirmation).
+- **Export**: Share PDF (Android Sharesheet), Save PDF (system file picker), Preview in a PDF viewer app.
+- **Settings**: version, privacy notes, language note, delete all data (with confirmation).
 
-## Configuration (repository variables, optional)
-Settings → Secrets and variables → Actions → Variables.
+## Screens
+Home, Business profile, Capability statement, Quotation, Tender list, Tender opportunity (with requirements),
+Readiness checklist, Saved documents, Settings and privacy. Sketches are in `docs/wireframes.md`.
 
-| Variable | Default | Meaning |
-|---|---|---|
-| `ANDROID_MODULE` | `app` | Application module |
-| `ANDROID_PROJECT_DIR` | `.` | Folder containing `gradlew` |
-| `ANDROID_JAVA_VERSION` | `17` | JDK (Temurin) |
-| `ANDROID_COMPILE_TASK` | `compileDebugSources` | Compile task |
-| `ANDROID_TEST_TASK` | `testDebugUnitTest` | Unit-test task |
-| `ANDROID_APK_TASK` | `assembleDebug` | APK task |
-| `ANDROID_RUN_TESTS` | `true` | Set `false` to skip unit tests |
-| `ARTIFACT_RETENTION_DAYS` | `7` | Artifact retention |
+## Architecture
+Kotlin, Jetpack Compose (Material 3), simple MVVM with one repository, Room as the single source of truth.
+```
+app/src/main/java/com/tenderready/png/
+  core/   pure logic: Money, QuotationCalculator, Checklist, DateUtil, Validation   (no Android)
+  data/   Room entities, DAOs, AppDatabase, AppRepository
+  pdf/    PdfLayout (pure, testable), PdfWriter (Android PdfDocument), DocumentBuilders, PdfExporter
+  ui/     Compose screens, MainViewModel, QuotationEditorViewModel, navigation
+```
+Money is stored as integer toea (1 kina = 100 toea), quantities as thousandths, tax rates as basis points.
+Rounding rules are in `docs/data-model.md`.
 
-## ZIP inbox (optional)
-Upload a ZIP to `_inbox/` and the **Process ZIP inbox** workflow extracts it into the repository after safety checks. See `docs/ZIP_INBOX_OPERATIONS.md`.
+## Build setup (unchanged from the template unless noted)
+Gradle 8.9, Android Gradle Plugin 8.7.3, Kotlin 2.0.21, JDK 17, compileSdk/targetSdk 34, minSdk 24.
+Added for this app: Compose BOM 2024.09.03, Navigation 2.8.2, Lifecycle 2.8.6, Activity 1.9.2, Core KTX 1.13.1,
+Room 2.6.1 with KSP 2.0.21-1.0.28, and (tests only) JUnit 4.13.2, Robolectric 4.13, AndroidX Test Core 1.6.1.
+`settings.gradle.kts` also lists `gradlePluginPortal()` for plugin resolution (the KSP plugin). See `DECISIONS.md`.
 
-The Android build workflow is skipped inside the template repository itself (it has no Android project). Repositories created from the template build normally.
+## Building with GitHub Actions
+1. Upload the ZIP to `_inbox/` on `main` (it is extracted automatically; extraction does not start a build).
+2. Run **Android build and test** manually from the Actions tab.
+3. Open the finished run, scroll to **Artifacts**, download the debug APK.
+Free-tier minutes are limited (private repositories get a monthly allowance; public repositories are free but
+rules can change). A build with Compose, KSP and Robolectric will likely take several minutes. Artifacts count
+towards storage and expire after the repository's retention period (a shorter period can be set in the workflow).
+`docs/android-build.yml` is an optional reference workflow.
 
-Docs index: `docs/`. Billing facts: `docs/FREE_USAGE_AND_BILLING.md`.
+## Install on your phone
+Download the APK artifact (it arrives as a ZIP, unzip it), open the `.apk`, and allow "install unknown apps"
+for your browser or file manager when asked. It is a debug build, signed with a debug key, not for Play Store use.
+
+## Known limitations
+See `REVIEW.md`. In short: dates are typed as YYYY-MM-DD; no unsaved-changes warning; light theme only;
+English only; no encryption of stored data; PDF preview opens an external viewer app; not yet built or run.
