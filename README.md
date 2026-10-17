@@ -5,7 +5,7 @@
 An offline-first native Android app that helps micro and small businesses in Papua New Guinea prepare
 professional documents and organise tender requirements. It needs no account, no internet and no paid service.
 
-**Status: MVP source code, version 0.1.0. It has NOT yet been built by GitHub Actions or run on a phone.**
+**Status: MVP, version 0.1.0. It compiles in GitHub Actions and its logic and database tests pass. The debug APK build and phone testing are still pending.**
 See `REVIEW.md` for exactly what was and was not checked.
 
 The app helps you organise and prepare documents. It does not confirm legal compliance or tender eligibility,
